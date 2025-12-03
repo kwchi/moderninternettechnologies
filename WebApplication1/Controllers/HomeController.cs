@@ -7,6 +7,7 @@ using WebApplicationData.Data;
 using WebApplicationData.Interfaces;
 using WebApplicationData.Models.Configurations;
 using WebApplicationData.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WebApplication1.Controllers
@@ -25,12 +26,14 @@ namespace WebApplication1.Controllers
 
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> IndexAsync()
         {
             var users = await _repository.ReadAll<WebApplicationUser>().ToListAsync();
             return View(users);
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();

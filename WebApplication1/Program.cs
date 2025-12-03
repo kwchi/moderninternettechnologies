@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using WebApplicationData.Models.Configurations;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using WebApplication1.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -99,6 +102,37 @@ options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpC
     }
 });
 });
+// Л4 1
+builder.Services.AddControllersWithViews(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, IsAuthorHandler>();       // Завдання 3
+builder.Services.AddSingleton<IAuthorizationHandler, MinHoursHandler>();       // Завдання 4
+builder.Services.AddSingleton<IAuthorizationHandler, ForumAccessHandler>();    // Завдання 5
+
+builder.Services.AddAuthorization(options =>
+{
+    // Л4  2
+    options.AddPolicy("ArchivePolicy", policy =>
+        policy.RequireClaim("IsVerifiedClient"));
+
+    // Л4 3 
+    options.AddPolicy("ResourceOwner", policy =>
+        policy.Requirements.Add(new IsAuthorRequirement()));
+
+    // Л4 4 
+    options.AddPolicy("PremiumContent", policy =>
+        policy.Requirements.Add(new MinHoursRequirement(100)));
+
+    // Л4 5
+    options.AddPolicy("ForumPolicy", policy =>
+        policy.Requirements.Add(new ForumAccessRequirement()));
+});
 
 var app = builder.Build();
 
@@ -108,10 +142,14 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRateLimiter();
+//app.UseRateLimiter();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages()
+    .RequireRateLimiting("PartitionedPolicy")
+    .AllowAnonymous();
 
 app.Run();
