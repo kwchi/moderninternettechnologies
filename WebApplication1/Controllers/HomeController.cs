@@ -8,7 +8,7 @@ using WebApplicationData.Interfaces;
 using WebApplicationData.Models.Configurations;
 using WebApplicationData.Repositories;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.Extensions.Localization;
 
 namespace WebApplication1.Controllers
 {
@@ -17,18 +17,20 @@ namespace WebApplication1.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IWebRepository _repository;
         private readonly MyConfiguration _config;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public HomeController(ILogger<HomeController> logger, IWebRepository repository, MyConfiguration config)
+        public HomeController(ILogger<HomeController> logger, IWebRepository repository, MyConfiguration config, IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
             _repository = repository;
             _config = config;
-
+            _localizer = localizer;
         }
 
         [AllowAnonymous]
         public async Task<IActionResult> IndexAsync()
         {
+            ViewData["MessageFromController"] = _localizer["WelcomeMessage"];
             var users = await _repository.ReadAll<WebApplicationUser>().ToListAsync();
             return View(users);
         }
