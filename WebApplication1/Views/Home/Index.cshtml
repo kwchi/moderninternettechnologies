@@ -5,20 +5,85 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <!-- Текст із файлу ресурсів (Index.*.resx) -->
-    <h1 class="display-4">@Localizer["HeaderTitle"]</h1>
+<div class="text-center mt-5">
 
-    <!-- Текст із контролера -->
-    <div class="alert alert-info">
-        @ViewData["MessageFromController"]
-    </div>
+    <h1 class="display-3 fw-bold text-white mb-4"
+        style="text-shadow: 0 5px 15px rgba(0,0,0,0.9); letter-spacing: 2px;">
+        @Localizer["HeaderTitle"]
+    </h1>
 
-    <div class="card mt-4">
-        <div class="card-body">
-            <h5>Тест форматів:</h5>
-            <p>Поточна дата: <strong>@DateTime.Now.ToLongDateString()</strong></p>
-            <p>Валюта (1000): <strong>@(1000.ToString("C"))</strong></p>
+    @if (ViewData["MessageFromController"] != null)
+    {
+        <div class="d-inline-block p-3 px-5 mb-5 rounded-pill shadow-lg"
+             style="background: rgba(13, 110, 253, 0.25); border: 1px solid rgba(13, 110, 253, 0.5); backdrop-filter: blur(5px);">
+            <span class="text-white fs-5">
+                <i class="bi bi-info-circle me-2"></i>
+                @ViewData["MessageFromController"]
+            </span>
+        </div>
+    }
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="dark-glass p-5 text-start">
+
+
+
+                <div class="fs-5 text-white-50">
+
+                    <p class="mb-2">
+                        <span class="text-white fw-bold">@Localizer["DateLabel"]:</span>
+                        @DateTime.Now.ToString("D")
+                    </p>
+
+                    <p class="mb-0">
+                        <span class="text-white fw-bold">@Localizer["CurrencyLabel"]:</span>
+                        <span class="text-success fw-bold">@(1000.ToString("C"))</span>
+                    </p>
+
+                </div>
+
+            </div>
         </div>
     </div>
+
 </div>
+<!-- ======= СТИЛІ ======= -->
+<style>
+
+    /* Основний заголовок */
+    .main-title {
+        letter-spacing: 0.5px;
+        color: #2c3e50;
+    }
+
+    /* Повідомлення */
+    .custom-alert {
+        max-width: 600px;
+        border-radius: 10px;
+        background: #e9f4ff;
+        color: #0b5ed7;
+        font-size: 1.05rem;
+        border-left: 5px solid #0b5ed7;
+    }
+
+    /* Картка форматів */
+    .custom-card {
+        max-width: 600px;
+        border-radius: 14px;
+        border: 1px solid #e5e5e5;
+        transition: 0.25s;
+        background: #ffffff;
+    }
+
+        .custom-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+        }
+
+    /* Текстові елементи */
+    .label {
+        font-weight: 600;
+        color: #444;
+    }
+</style>

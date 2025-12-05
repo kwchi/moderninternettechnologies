@@ -1,0 +1,94 @@
+﻿@model WebApplicationData.Data.Book
+
+
+@{
+    ViewData["Title"] = "Редагування книги";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="dark-glass p-5">
+
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold text-white">✏️ Редагування</h2>
+                    <p class="text-white-50">Змініть дані про книгу</p>
+                </div>
+
+                <form asp-action="Edit" enctype="multipart/form-data">
+
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CoverImagePath" />
+
+                    <div class="text-center mb-4 p-3 rounded" style="background: rgba(255,255,255,0.05);">
+                        <label class="form-label text-white small text-uppercase mb-3 d-block">Поточна обкладинка</label>
+
+                        @if (!string.IsNullOrEmpty(Model.CoverImagePath))
+                        {
+                            <img src="~/images/books/@Model.CoverImagePath"
+                                 class="shadow rounded mb-3"
+                                 style="max-height: 200px; max-width: 100%; object-fit: contain;" />
+                        }
+                        else
+                        {
+                            <div class="text-white-50 fst-italic mb-3">Немає обкладинки</div>
+                        }
+
+                        <div class="mt-2">
+                            <label for="newCover" class="form-label text-warning small" style="cursor: pointer;">
+                                <i class="bi bi-upload me-1"></i> Завантажити нову обкладинку (опціонально)
+                            </label>
+                            <input type="file" name="CoverImage" id="newCover" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label text-white fw-bold small text-uppercase ls-1">Назва книги</label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="AuthorEmail" class="form-label text-white fw-bold small text-uppercase ls-1">Email Автора</label>
+                        <input asp-for="AuthorEmail" class="form-control" />
+                        <span asp-validation-for="AuthorEmail" class="text-danger small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Year" class="form-label text-white fw-bold small text-uppercase ls-1">Рік</label>
+                            <input asp-for="Year" class="form-control" />
+                            <span asp-validation-for="Year" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Price" class="form-label text-white fw-bold small text-uppercase ls-1">Ціна</label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-5">
+                        <label asp-for="Discount" class="form-label text-white fw-bold small text-uppercase ls-1">Знижка (грн)</label>
+                        <input asp-for="Discount" class="form-control" />
+                        <span asp-validation-for="Discount" class="text-danger small"></span>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-glass-warning py-3 fw-bold text-dark">
+                            <i class="bi bi-save me-2"></i>Зберегти зміни
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-light py-2 border-0 rounded-pill">Скасувати</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

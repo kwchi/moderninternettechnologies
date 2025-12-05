@@ -39,5 +39,8 @@ namespace WebApplication1.Models
         [Remote(action: "VerifyDiscount", controller: "Books", AdditionalFields = "Price", ErrorMessage = "Знижка не може бути більшою за ціну.")]
         [Display(Name = "Знижка")]
         public decimal Discount { get; set; }
+
+        [Display(Name = "Обкладинка книги")]
+        public IFormFile? CoverImage { get; set; }
     }
 }

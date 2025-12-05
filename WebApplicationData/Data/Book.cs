@@ -10,10 +10,11 @@ namespace WebApplicationData.Data
         public string AuthorEmail { get; set; }
         public int Year { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")] 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
         public decimal Discount { get; set; }
+        public string? CoverImagePath { get; set; }
     }
 }

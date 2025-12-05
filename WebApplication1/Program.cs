@@ -62,7 +62,7 @@ builder.Services.AddDefaultIdentity<WebApplicationUser>(options =>
 builder.Services.AddScoped<IWebRepository, WebRepository>();
 
 
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 //6
@@ -104,14 +104,6 @@ options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpC
             });
     }
 });
-});
-// Л4 1
-builder.Services.AddControllersWithViews(options =>
-{
-    var policy = new AuthorizationPolicyBuilder()
-        .RequireAuthenticatedUser()
-        .Build();
-    options.Filters.Add(new AuthorizeFilter(policy));
 });
 
 builder.Services.AddSingleton<IAuthorizationHandler, IsAuthorHandler>();       // Завдання 3

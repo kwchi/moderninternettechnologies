@@ -3,57 +3,143 @@
 
 @{
     ViewData["Title"] = "Книги";
+    // Визначення поточної дії для коректного формування посилань
+    string currentAction = ViewContext.RouteData.Values["action"].ToString();
 }
 
-<h2>Список Книг</h2>
+<div class="container pb-5">
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Додати нову</a>
-</p>
+    <div class="dark-glass p-4 mb-5 d-flex flex-wrap justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-1 text-white">Бібліотека</h2>
+            <span class="text-white-50 small">
+                Доступно книг: @Model.TotalCount
+                (@Model.Count() показано на сторінці)
+            </span>
+        </div>
+        <a asp-action="Create" class="btn btn-glass-primary px-4 py-2 rounded-pill">
+            <i class="bi bi-plus-lg"></i> Додати книгу
+        </a>
+    </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Назва</th>
-            <th>Автор</th>
-            <th>Рік</th>
-            <th>Ціна</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+    <div class="row g-4">
+        @foreach (var book in Model)
         {
-            <tr>
-                <td>@item.Title</td>
-                <td>@item.AuthorEmail</td>
-                <td>@item.Year</td>
-                <td>@item.Price</td>
-            </tr>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card book-card h-100 border-0">
+
+                    <div class="book-cover-container p-3 text-center position-relative">
+
+                        @if (book.Discount > 0)
+                        {
+                            <span class="position-absolute top-0 start-0 m-3 badge bg-danger shadow-sm">
+                                SALE
+                            </span>
+                        }
+
+                        <img src="@(book.CoverImagePath != null
+                                                             ? Url.Content("~/images/book/" + book.CoverImagePath)
+                                                             : Url.Content("~/images/book/no-cover.png"))"
+                             class="shadow-lg rounded"
+                             style="height: 220px; object-fit: contain; max-width: 100%; transition: transform 0.3s;"
+                             alt="@book.Title">
+                    </div>
+
+                    <div class="card-body d-flex flex-column">
+
+                        <div class="mb-3">
+                            <h5 class="card-title text-truncate mb-1" title="@book.Title">@book.Title</h5>
+                            <p class="card-text small text-muted text-truncate">
+                                <i class="bi bi-pen me-1"></i>@book.AuthorEmail
+                            </p>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="year-badge">@book.Year</span>
+
+                            <div class="text-end">
+                                @if (book.Discount > 0)
+                                {
+                                    <div class="text-decoration-line-through text-white-50 small" style="line-height: 1;">
+                                        @book.Price ₴
+                                    </div>
+                                    <div class="price-tag text-warning fw-bold">
+                                        @(book.Price - book.Discount) ₴
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="price-tag">@book.Price ₴</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mt-auto pt-3 border-top border-secondary border-opacity-25 d-flex gap-2">
+
+                            <a asp-action="Edit" asp-route-id="@book.Id" class="btn btn-glass-warning btn-sm flex-grow-1 fw-bold">
+                                <i class="bi bi-pencil-square me-1"></i> Змінити
+                            </a>
+
+                            <a asp-action="Delete" asp-route-id="@book.Id" class="btn btn-glass-danger btn-sm px-3" title="Видалити">
+                                <i class="bi bi-trash-fill"></i>
+                            </a>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
 
-@{
-    // Логіка для блокування кнопок
-    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-}
+    ---
 
-<!-- КНОПКИ ПАГІНАЦІЇ -->
-<div class="d-flex justify-content-center gap-2">
-    <a asp-action="Index"
-       asp-route-pageNumber="@(Model.PageIndex - 1)"
-       class="btn btn-outline-primary @prevDisabled">
-        &laquo; Попередня
-    </a>
+    ## 📑 Навігація Пагінації
 
-    <span class="align-self-center">
-        Сторінка @Model.PageIndex з @Model.TotalPages
-    </span>
+    <div class="d-flex justify-content-center mt-5">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
 
-    <a asp-action="Index"
-       asp-route-pageNumber="@(Model.PageIndex + 1)"
-       class="btn btn-outline-primary @nextDisabled">
-        Наступна &raquo;
-    </a>
+                @{
+                    // Параметри для кнопки "Попередня"
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                }
+
+                <li class="page-item @prevDisabled">
+                    <a asp-action="@currentAction"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       class="page-link text-white bg-dark border-secondary">
+                        <i class="bi bi-arrow-left"></i> Попередня
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    var active = (i == Model.PageIndex) ? "active bg-primary border-primary" : "bg-dark border-secondary";
+
+                    <li class="page-item @active">
+                        <a asp-action="@currentAction"
+                           asp-route-pageNumber="@i"
+                           class="page-link text-white @active">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                @{
+                    // Параметри для кнопки "Наступна"
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+
+                <li class="page-item @nextDisabled">
+                    <a asp-action="@currentAction"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       class="page-link text-white bg-dark border-secondary">
+                        Наступна <i class="bi bi-arrow-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
 </div>

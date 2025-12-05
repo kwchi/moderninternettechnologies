@@ -1,13 +1,40 @@
 ﻿@model WebApplicationData.Data.AppResource
 
-<h2>Створити Ресурс</h2>
+@{
+    ViewData["Title"] = "Створити ресурс";
+}
 
-<form asp-action="Create" method="post">
-    <div class="form-group mb-3">
-        <label asp-for="Title" class="control-label">Назва ресурсу</label>
-        <input asp-for="Title" class="form-control" />
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="dark-glass p-5">
+
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-white">Новий Ресурс</h2>
+                    <p class="text-white-50 small">Заповніть інформацію нижче</p>
+                </div>
+
+                <form asp-action="Create" method="post">
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label-styled">
+                            <i class="bi bi-tag me-2"></i>Назва ресурсу
+                        </label>
+                        <input asp-for="Title" class="form-control form-glass" placeholder="Введіть назву..." />
+                    </div>
+
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" class="btn btn-glass-primary py-2 rounded-pill fw-bold">
+                            <i class="bi bi-check-lg me-2"></i>Зберегти
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass-secondary py-2 rounded-pill">
+                            Назад до списку
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-success">Зберегти</button>
-    <a asp-action="Index" class="btn btn-secondary">Назад</a>
-</form>
+</div>

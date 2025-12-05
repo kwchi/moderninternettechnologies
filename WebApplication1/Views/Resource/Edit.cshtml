@@ -1,15 +1,43 @@
 ﻿@model WebApplicationData.Data.AppResource
 
-<h2>Редагування Ресурсу (Тільки для автора)</h2>
+@{
+    ViewData["Title"] = "Редагування";
+}
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-    <div class="form-group mb-3">
-        <label asp-for="Title" class="control-label">Назва ресурсу</label>
-        <input asp-for="Title" class="form-control" />
+            <div class="dark-glass p-5">
+
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-white"> Редагування</h2>
+                    <p class="text-warning small">
+                        <i class="bi bi-lock me-1"></i>Доступно тільки автору
+                    </p>
+                </div>
+
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label-styled">
+                            <i class="bi bi-card-heading me-2"></i>Назва ресурсу
+                        </label>
+                        <input asp-for="Title" class="form-control form-glass" />
+                    </div>
+
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" class="btn btn-glass-warning py-2 rounded-pill fw-bold text-dark">
+                            <i class="bi bi-save me-2"></i>Зберегти зміни
+                        </button>
+                        <a asp-action="Index" class="btn btn-glass-secondary py-2 rounded-pill">
+                            Скасувати
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
-
-    <button type="submit" class="btn btn-primary">Зберегти зміни</button>
-    <a asp-action="Index" class="btn btn-secondary">Назад</a>
-</form>
+</div>

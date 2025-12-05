@@ -1,40 +1,78 @@
 ﻿@model IEnumerable<WebApplicationData.Data.AppResource>
 
-<h2>Список Ресурсів</h2>
+@{
+    ViewData["Title"] = "Список ресурсів";
+}
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Створити Новий Ресурс</a>
-</p>
+<div class="container py-5">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Назва</th>
-            <th>Автор</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+    <div class="dark-glass overflow-hidden" style="border-radius: 20px;">
+
+        <div class="p-4 d-flex justify-content-between align-items-center border-bottom border-white border-opacity-10">
+            <div>
+                <h2 class="h4 mb-0 fw-bold text-white">Список Ресурсів</h2>
+                <span class="small text-white-50">Керування доступними ресурсами</span>
+            </div>
+
+            <a asp-action="Create" class="btn btn-glass-primary px-4 rounded-pill">
+                <i class="bi bi-plus-lg me-1"></i> Новий ресурс
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-glass mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Назва</th>
+                        <th>Автор</th>
+                        <th class="text-end pe-4">Дії</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4 text-white-50">#@item.Id</td>
+
+                            <td class="fw-bold fs-5">
+                                @item.Title
+                            </td>
+
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-light bg-opacity-10 d-flex align-items-center justify-content-center me-2 text-white"
+                                         style="width: 35px; height: 35px;">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+
+                                    @if (item.Author != null)
+                                    {
+                                        <span>@item.Author.FirstName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">Невідомий</span>
+                                    }
+                                </div>
+                            </td>
+
+                            <td class="text-end pe-4">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-glass-warning btn-sm px-3 rounded-pill">
+                                    Редагувати
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (!Model.Any())
         {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Title</td>
-                <td>
-                    @if (item.Author != null)
-                    {
-                        @($"{item.Author.FirstName} {item.Author.LastName}")
-                    }
-                    else
-                    {
-                        <span class="text-muted">Невідомий (ID: @item.AuthorId)</span>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Редагувати</a>
-                </td>
-            </tr>
+            <div class="text-center p-5 text-white-50">
+                <p>Список ресурсів порожній</p>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

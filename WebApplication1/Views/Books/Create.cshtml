@@ -4,67 +4,69 @@
     ViewData["Title"] = "Створити книгу";
 }
 
-<h2>Створити нову книгу</h2>
-<hr />
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create">
-            <!-- Загальний список помилок -->
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="dark-glass p-5">
 
-            <!-- Назва (Remote Validation) -->
-            <div class="mb-3">
-                <label asp-for="Title" class="form-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold text-white">Нова книга</h2>
+                    <p class="text-white-50">Внесіть дані про видання</p>
+                </div>
+
+                <form asp-action="Create" enctype="multipart/form-data">
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label text-white fw-bold small text-uppercase ls-1">Назва книги</label>
+                        <input asp-for="Title" class="form-control" placeholder="Наприклад: Гаррі Поттер" />
+                        <span asp-validation-for="Title" class="text-warning small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="AuthorEmail" class="form-label text-white fw-bold small text-uppercase ls-1">Email Автора</label>
+                        <input asp-for="AuthorEmail" class="form-control" placeholder="author@example.com" />
+                        <span asp-validation-for="AuthorEmail" class="text-warning small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ConfirmAuthorEmail" class="form-label text-white fw-bold small text-uppercase ls-1">Підтвердження Email</label>
+                        <input asp-for="ConfirmAuthorEmail" class="form-control" placeholder="Повторіть email" />
+                        <span asp-validation-for="ConfirmAuthorEmail" class="text-warning small"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Year" class="form-label text-white fw-bold small text-uppercase ls-1">Рік</label>
+                            <input asp-for="Year" class="form-control" placeholder="2024" />
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label asp-for="Price" class="form-label text-white fw-bold small text-uppercase ls-1">Ціна</label>
+                            <input asp-for="Price" class="form-control" placeholder="0.00" />
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Discount" class="form-label text-white fw-bold small text-uppercase ls-1">Знижка</label>
+                        <input asp-for="Discount" class="form-control" placeholder="0" />
+                        <span asp-validation-for="Discount" class="text-warning small"></span>
+                    </div>
+
+                    <div class="mb-5">
+                        <label asp-for="CoverImage" class="form-label text-white fw-bold small text-uppercase ls-1">Обкладинка</label>
+                        <input asp-for="CoverImage" type="file" class="form-control" />
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary py-3 fw-bold shadow-lg"
+                                style="background: linear-gradient(45deg, #0d6efd, #0099ff); border: none;">
+                            Створити
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-light py-2 border-0">Назад</a>
+                    </div>
+
+                </form>
             </div>
-
-            <!-- Email -->
-            <div class="mb-3">
-                <label asp-for="AuthorEmail" class="form-label"></label>
-                <input asp-for="AuthorEmail" class="form-control" />
-                <span asp-validation-for="AuthorEmail" class="text-danger"></span>
-            </div>
-
-            <!-- Confirm Email -->
-            <div class="mb-3">
-                <label asp-for="ConfirmAuthorEmail" class="form-label"></label>
-                <input asp-for="ConfirmAuthorEmail" class="form-control" />
-                <span asp-validation-for="ConfirmAuthorEmail" class="text-danger"></span>
-            </div>
-
-            <!-- Year -->
-            <div class="mb-3">
-                <label asp-for="Year" class="form-label"></label>
-                <input asp-for="Year" class="form-control" />
-                <span asp-validation-for="Year" class="text-danger"></span>
-            </div>
-
-            <!-- Price -->
-            <div class="mb-3">
-                <label asp-for="Price" class="form-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-
-            <!-- Discount (Dependent Validation) -->
-            <div class="mb-3">
-                <label asp-for="Discount" class="form-label"></label>
-                <input asp-for="Discount" class="form-control" />
-                <span asp-validation-for="Discount" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <input type="submit" value="Створити" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<!-- Підключення скриптів для клієнтської валідації -->
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
